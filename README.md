@@ -3,7 +3,9 @@
 # CMPUT 291 Project 2 - Fall 2023  
 Group member names and ccids (3-4 members)  
   aakarsh1, Aakarsh Gupta
+  
   prathams, Pratham Prajapati
+  
   lnineza, Mikael Nineza
 
 We did not collaborate with anyone else.
