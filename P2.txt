@@ -29,12 +29,6 @@ functions.py
 - top_users(n: int, db: str)
 	returns top n users based on followers
 
-- find_tweet(id: int, db: str)
-	returns tweet that matches id
-
-- find_user(id: int, db: str)
-	returns user that matches id
-
 - compose_tweet(text, db: str)
 	inserts the tweet to the database, set the date filed to the system date 
 and username to "291user". All other fields will be null.
