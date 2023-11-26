@@ -23,7 +23,7 @@ def load_json(file_name, port):
                 tweet = json.loads(line)
                 batch.append(tweet)
                 # change the batch size as needed
-                if len(batch) >= 5000:
+                if len(batch) >= 1000:
                     collection.insert_many(batch)
                     batch.clear()
             except json.JSONDecodeError as e:
@@ -35,7 +35,7 @@ def load_json(file_name, port):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: load-json.py <filename.json> <port>")
+        print("Usage: load_json.py <filename.json> <port>")
         sys.exit(1)
 
     json_file, port = sys.argv[1], int(sys.argv[2])
