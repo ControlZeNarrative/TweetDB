@@ -135,7 +135,7 @@ def display_top_users(n: int):
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: load-json.py <filename.json> <port>")
+        print("Usage: main.py <filename.json> <port>")
         sys.exit(1)
 
     json_file, port = sys.argv[1], int(sys.argv[2])
