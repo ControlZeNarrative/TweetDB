@@ -30,7 +30,7 @@ def correct_input(usr_input: str, a: int, b: int):
     return 0
 
 def display_tweets(keywords: tuple):
-    tweets = functions.search_tweets(keywords)
+    tweets = search_tweets(keywords)
     i = 0
     for tweet in tweets:
         i += 1
@@ -55,7 +55,7 @@ def display_tweets(keywords: tuple):
     return
 
 def display_users(keyword: str):
-    users = functions.search_users(keyword)
+    users = search_users(keyword)
     i = 0
     for user in users:
         i += 1
@@ -82,7 +82,7 @@ def display_users(keyword: str):
     return
 
 def display_top_tweets(n: int, count: str):
-    tweets = functions.top_tweets(n, count)
+    tweets = top_tweets(n, count)
     i = 0
     for tweet in tweets:
         i += 1
@@ -109,7 +109,7 @@ def display_top_tweets(n: int, count: str):
     return
 
 def display_top_users(n: int):
-    users = functions.top_users(n)
+    users = top_users(n)
     i = 1
     for user in users:
         print(f'{i}. Username: {user["username"]}, Display name: {user["displayname"]}, Location: {user["location"]}')
@@ -139,7 +139,7 @@ def main():
         sys.exit(1)
 
     json_file, port = sys.argv[1], int(sys.argv[2])
-    load_json.load_json(json_file, port)
+    load_json(json_file, port)
 
 
     command = main_menu()
@@ -159,6 +159,7 @@ def main():
             while not any(char.isalpha() or char.isdigit() for char in keyword):
                 keyword = input("Enter a keyword to search for in users: ")
 
+            # Display users that match the key word
             display_users(keyword)
         elif command == 3:
             n = input("Enter the Top 'n' tweets you wish to see: ")
@@ -185,8 +186,11 @@ def main():
             display_top_users(n)
         elif command == 5:
             text = input("Please enter the text of your tweet: ")
-            functions.compose_tweet(text)
-            print("You've posted a tweet.\n")
+            try:
+                functions.compose_tweet(text)
+                print("You've posted a tweet.\n")
+            except:
+                print("Something went wrong while adding tweet to db")
         else:
             break
         command = main_menu()
