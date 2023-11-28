@@ -44,6 +44,7 @@ def display_tweets(keywords: tuple):
         while correct_input(answer, 1, i) != 1:
             answer = input(f"Please enter a number between 0 and {i}: ")
 
+        answer = int(answer)
         #Print all fields
         if answer != 0:
             j = 1
