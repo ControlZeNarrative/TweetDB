@@ -1,9 +1,6 @@
-import json
-import sys
 from pymongo import MongoClient
 from datetime import datetime
 
-# from load_json import load_json
 
 # Connecting to MongoDB
 client = MongoClient('localhost', 27017)
@@ -17,7 +14,7 @@ def search_tweets(keywords: tuple, db: str):
     collection = db['tweets']
 
     # Matching tweets containing all keywords
-    query = {'$or': [{'content': {'$regex': keyword, '$options': 'i'}}
+    query = {'$and': [{'content': {'$regex': keyword, '$options': 'i'}}
                       for keyword in keywords
                       ]}
 
@@ -150,11 +147,3 @@ def compose_tweet(content: str, db: str):
     # Inserting the tweet into the database
     collection.insert_one(tweet)
 
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: <script>.py <keyword1> <keyword2> ... <keywordN>")
-        sys.exit(1)
-
-    keywords = sys.argv[1:]
-    search_tweets(keywords)
