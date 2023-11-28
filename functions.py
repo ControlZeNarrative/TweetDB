@@ -24,13 +24,6 @@ def search_tweets(keywords: tuple, db: str):
 
     results = collection.find(query)
 
-    # Print the id, date, content, and username for each matching tweet
-    for tweet in results:
-        print(f"ID: {tweet['id']}")
-        print(f"Date: {tweet['date']}")
-        print(f"Content: {tweet['content']}")
-        print(f"Username: {tweet['username']}")
-        print("-------------------")
 
     return results
 
