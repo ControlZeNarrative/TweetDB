@@ -10,7 +10,6 @@ client = MongoClient('localhost', 27017)
 db = client['291db']
 
 
-
 def search_tweets(keywords: tuple, db: str):
     # Connecting to MongoDB
     client = MongoClient('localhost', 27017)
@@ -18,14 +17,15 @@ def search_tweets(keywords: tuple, db: str):
     collection = db['tweets']
 
     # Matching tweets containing all keywords
-    query = {'$and': [{'content': {'$regex': keyword, '$options': 'i'}} 
-    for keyword in keywords
-    ]}
+    query = {'$and': [{'content': {'$regex': keyword, '$options': 'i'}}
+                      for keyword in keywords
+                      ]}
 
     results = collection.find(query)
     results = list(results)
 
     return results
+
 
 def search_users(keyword: str, db: str):
     # Connect to MongoDB
@@ -34,7 +34,8 @@ def search_users(keyword: str, db: str):
     collection = db['tweets']
 
     # Create a query that matches users whose displayname or location contains the keyword
-    query = {'$or': [{'user.displayname': {'$regex': keyword, '$options': 'i'}}, {'user.location': {'$regex': keyword, '$options': 'i'}}]}
+    query = {'$or': [{'user.displayname': {'$regex': keyword, '$options': 'i'}},
+                     {'user.location': {'$regex': keyword, '$options': 'i'}}]}
 
     # Execute the query
     results = collection.find(query)
@@ -51,7 +52,6 @@ def search_users(keyword: str, db: str):
     return userList
 
 
-
 def top_tweets(n: int, count: str, db: str):
     # Connecting to MongoDB
     client = MongoClient('localhost', 27017)
@@ -60,14 +60,15 @@ def top_tweets(n: int, count: str, db: str):
 
     # Retrieving the top n tweets based on the specified field
     if count == "r":
-        query = collection.find().sort([(retweetCount, -1)]).limit(n)
+        query = collection.find().sort([('retweetCount', -1)]).limit(n)
     elif count == "l":
-        query = collection.find().sort([(likeCount, -1)]).limit(n)
+        query = collection.find().sort([('likeCount', -1)]).limit(n)
     else:
-        query = collection.find().sort([(quoteCount, -1)]).limit(n)
+        query = collection.find().sort([('quoteCount', -1)]).limit(n)
 
     query = list(query)
     return query
+
 
 def top_users(n: int, db: str):
     # Connecting to MongoDB
@@ -75,7 +76,7 @@ def top_users(n: int, db: str):
     db = client[db]
     collection = db['tweets']
 
-    # Aggregating tweets based on username and getting their max followersCount 
+    # Aggregating tweets based on username and getting their max followersCount
     ag_pipeline = [
         {'$group': {
             '_id': '$user.username',
@@ -105,7 +106,7 @@ def compose_tweet(content: str, db: str):
         'date': datetime.now(),
         'user': {
             'username': '291user',
-    # Setting the other fields to null
+            # Setting the other fields to null
             'displayname': None,
             'id': None,
             'description': None,
