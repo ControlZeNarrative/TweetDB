@@ -84,13 +84,10 @@ def top_users(n: int, db: str):
     ]
 
     # Execute the aggregation pipeline
-    results = collection.aggregate(ag_pipeline)
+    results = collection.aggregate(pipeline)
 
     # Create a list of users
-    users = [
-            {'username': user['_id'], 'displayname': user['displayname'], 'followersCount': user['followersCount']} 
-             for user in results
-             ]
+    users = [user['user'] for user in results]
 
     return users
 
