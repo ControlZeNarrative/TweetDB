@@ -6,9 +6,9 @@ client = MongoClient('localhost', 27017)
 db = client['291db']
 
 
-def search_tweets(keywords: tuple, db: str):
+def search_tweets(keywords: tuple, db: str, port: int):
     # Connecting to MongoDB
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('localhost', port)
     db = client[db]
     collection = db['tweets']
 
@@ -23,9 +23,9 @@ def search_tweets(keywords: tuple, db: str):
     return results
 
 
-def search_users(keyword: str, db: str):
+def search_users(keyword: str, db: str, port: int):
     # Connect to MongoDB
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('localhost', port)
     db = client[db]
     collection = db['tweets']
 
@@ -48,9 +48,9 @@ def search_users(keyword: str, db: str):
     return userList
 
 
-def top_tweets(n: int, count: str, db: str):
+def top_tweets(n: int, count: str, db: strt, port: int):
     # Connecting to MongoDB
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('localhost', port)
     db = client[db]
     collection = db['tweets']
 
@@ -66,9 +66,9 @@ def top_tweets(n: int, count: str, db: str):
     return query
 
 
-def top_users(n: int, db: str):
+def top_users(n: int, db: str, port: int):
     # Connect to MongoDB
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('localhost', port)
     db = client[db]
     collection = db['tweets']
     collection2 = db['tweets']
@@ -96,9 +96,9 @@ def top_users(n: int, db: str):
     return complete_users
 
 
-def compose_tweet(content: str, db: str):
+def compose_tweet(content: str, db: str, port: int):
     # Connect to MongoDB
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('localhost', port)
     db = client[db]
     collection = db['tweets']
 
