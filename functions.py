@@ -62,14 +62,7 @@ def top_tweets(n: int, count: str, db: str):
     query = collection.find().sort([(count, -1)]).limit(n)
 
     # Create a list of tweets
-    tweets = []
-    for tweet in query:
-        tweets.append({
-            'id': tweet['id'],
-            'date': tweet['date'],
-            'content': tweet['content'],
-            'username': tweet['username']
-        })
+    tweets = [tweet for tweet in query]
 
     return tweets
 
