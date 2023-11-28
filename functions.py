@@ -23,7 +23,7 @@ def search_tweets(keywords: tuple, db: str):
     ]}
 
     results = collection.find(query)
-
+    results = list(results)
 
     return results
 
@@ -59,12 +59,15 @@ def top_tweets(n: int, count: str, db: str):
     collection = db['tweets']
 
     # Retrieving the top n tweets based on the specified field
-    query = collection.find().sort([(count, -1)]).limit(n)
+    if count == "r":
+        query = collection.find().sort([(retweetCount, -1)]).limit(n)
+    elif count == "l":
+        query = collection.find().sort([(likeCount, -1)]).limit(n)
+    else:
+        query = collection.find().sort([(quoteCount, -1)]).limit(n)
 
-    # Create a list of tweets
-    tweets = [tweet for tweet in query]
-
-    return tweets
+    query = list(query)
+    return query
 
 def top_users(n: int, db: str):
     # Connecting to MongoDB
@@ -84,12 +87,10 @@ def top_users(n: int, db: str):
     ]
 
     # Execute the aggregation pipeline
-    results = collection.aggregate(pipeline)
+    results = collection.aggregate(ag_pipeline)
 
-    # Create a list of users
-    users = [user['user'] for user in results]
-
-    return users
+    results = list(results)
+    return results
 
 
 def compose_tweet(content: str, db: str):
