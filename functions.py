@@ -75,11 +75,12 @@ def top_users(n: int, db: str):
     client = MongoClient('localhost', 27017)
     db = client[db]
     collection = db['tweets']
+    collection2 = db['tweets']
 
     # Aggregating tweets based on username and get the maximum followersCount for each user
     ag_pipeline = [
         {'$group': {
-            '_id': '$user.username',
+            '_id': '$user.id',
             'user': {'$first': '$user'}
         }},
         {'$sort': {'user.followersCount': -1}},
@@ -89,11 +90,10 @@ def top_users(n: int, db: str):
     # Execute the aggregation pipeline
     results = collection.aggregate(ag_pipeline)
 
-    # Create a list of users
     users = [user['user'] for user in results]
 
     # Get all fields for these users
-    complete_users = [collection.find_one({'user.username': user['username']})['user'] for user in users]
+    complete_users = [collection2.find_one({'id': user['id'], 'followersCount': user['followersCount']})['user'] for user in users]
 
     return complete_users
 
