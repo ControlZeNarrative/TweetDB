@@ -17,7 +17,7 @@ def search_tweets(keywords: tuple, db: str):
     collection = db['tweets']
 
     # Matching tweets containing all keywords
-    query = {'$and': [{'content': {'$regex': keyword, '$options': 'i'}}
+    query = {'$or': [{'content': {'$regex': keyword, '$options': 'i'}}
                       for keyword in keywords
                       ]}
 
