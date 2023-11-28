@@ -95,3 +95,60 @@ This will insert a new tweet with the content 'Hello, world!', the current syste
 Please note that this function does not return anything. Also, remember to handle exceptions and errors appropriately in your production code. This is just a basic example and does not include error handling. Let me know if you need further assistance! 
 
 Input: Thank you, this will work!
+
+Input: In my search_tweets 
+def search_tweets(keywords: tuple, db: str):
+    # Connecting to MongoDB
+    client = MongoClient('localhost', 27017)
+    db = client[db]
+    collection = db['tweets']
+
+    # Matching tweets containing all keywords
+    query = {'$and': [{'content': {'$regex': '\\\\b' + keyword + '\\\\b', '$options': 'i'}}
+                      for keyword in keywords
+                      ]}
+
+    results = collection.find(query)
+    results = list(results)
+
+    return results
+
+ In searching for tweets and users, a search term matches if the search term appears in the matching field as a separate word (i.e., the term is separated by spaces or punctuations). The search for "john" will match "John Doe", "#John Doe" but not "JohnDoe". 
+
+AI output: To ensure that the search_tweets function matches keywords as separate words (i.e., bounded by spaces or punctuation), you're on the right track by using regex with word boundaries (\\b). However, there's a slight adjustment needed in your regex pattern to ensure it works correctly in MongoDB.
+
+Adjusting the Regex Pattern
+Your current regex pattern '\\\\b' + keyword + '\\\\b' is almost correct, but it might require a slight modification depending on how Python and MongoDB interpret the escape characters for word boundaries:
+
+Word Boundary in Regex: In regular expressions, \b is used to denote a word boundary. However, in Python strings, backslashes are also escape characters, so you need to double them to ensure they are correctly interpreted.
+
+Case Insensitivity: You've correctly used '$options': 'i' for case-insensitive matching.
+
+Updated search_tweets Function
+Here's the updated function with the correct usage of word boundaries in the regex:
+
+python
+Copy code
+def search_tweets(keywords: tuple, db: str):
+    # Connecting to MongoDB
+    client = MongoClient('localhost', 27017)
+    db = client[db]
+    collection = db['tweets']
+
+    # Matching tweets containing all keywords as separate words
+    query = {'$and': [{'content': {'$regex': f'\\b{keyword}\\b', '$options': 'i'}}
+                      for keyword in keywords
+                      ]}
+
+    results = collection.find(query)
+    results = list(results)
+
+    return results
+In this updated function, f'\\b{keyword}\\b' uses Python's f-string formatting to insert the keyword into the regex pattern. The double backslashes (\\b) ensure that the word boundary character (\b) is correctly interpreted.
+
+Testing the Function
+Make sure to test this function with various keywords to ensure that it's matching as expected:
+
+It should match keywords that appear as separate words in the content.
+It should not match keywords that are part of larger words.
+This function, along with appropriate text indexing on the content field, should provide efficient and accurate searching capabilities for your application.
