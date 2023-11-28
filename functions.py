@@ -35,31 +35,28 @@ def search_tweets(keywords: tuple, db: str):
     return results
 
 def search_users(keyword: str, db: str):
-    # Connecting to MongoDB
+    # Connect to MongoDB
     client = MongoClient('localhost', 27017)
     db = client[db]
     collection = db['tweets']
 
-    # Creating a query that matches users basing off displayname or location
+    # Create a query that matches users whose displayname or location contains the keyword
     query = {'$or': [{'user.displayname': {'$regex': keyword, '$options': 'i'}}, {'user.location': {'$regex': keyword, '$options': 'i'}}]}
 
-
+    # Execute the query
     results = collection.find(query)
 
-    # Create a list of users
-    users = []
+    # Creating a list of users
+    userList = []
     for tweet in results:
         user = tweet['user']
-        # Check if the user is already in the list
-        if not any(u['username'] == user['username'] for u in users):
-            # Add the user to the list
-            users.append({
-                'username': user['username'],
-                'displayname': user['displayname'],
-                'location': user['location']
-            })
+        # Checking if the user is already in the list
+        if not any(u['username'] == user['username'] for u in userList):
+            # Adding the user to the list
+            userList.append(user)
 
-    return users
+    return userList
+
 
 
 def top_tweets(n: int, count: str, db: str):
