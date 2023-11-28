@@ -17,7 +17,7 @@ def main_menu():
         if option.isdigit() and 1 <= int(option) <= 6:
             break
         else:
-            print("Invalid option selected! Please enter a number between 1 and 5.")
+            print("Invalid option selected! Please enter a number between 1 and 6.")
     return int(option)
 
 
@@ -28,7 +28,7 @@ def correct_input(usr_input: str, a: int, b: int):
     else:
         return 0
 
-    if (uinput >= a and uinput <= b) or uinput == 0:
+    if (a <= uinput <= b) or uinput == 0:
         return 1
     return 0
 
@@ -45,7 +45,8 @@ def display_tweets(keywords: tuple, db: str):
         tweet_content = tweet.get('content')
 
         if tweet_id is not None:
-            print(f'{i}. ID: {tweet_id}, Date: {tweet_date}, Username: {tweet_username}\nTweet Content: {tweet_content}')
+            print(
+                f'{i}. ID: {tweet_id}, Date: {tweet_date}, Username: {tweet_username}\nTweet Content: {tweet_content}')
         else:
             print(f'{i}. ID: NULL, Date: {tweet_date}, Username: {tweet_username}\nTweet Content: {tweet_content}')
 
@@ -135,7 +136,7 @@ def display_top_users(n: int, db: str):
     if len(users) == 0:
         print("No such users")
         return
-    
+
     i = 1
     for user in users:
         print(
@@ -163,10 +164,8 @@ def main():
     if len(sys.argv) != 3:
         print("Usage: main.py <filename.json> <port>")
         sys.exit(1)
-
     json_file, port = sys.argv[1], int(sys.argv[2])
     load_json.loadjson(json_file, port)
-
     db = "291db"
     command = main_menu()
     while (command):
