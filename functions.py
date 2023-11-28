@@ -1,40 +1,56 @@
 import json
 import sys
-from datetime import datetime
 from pymongo import MongoClient
+from datetime import datetime
 
 # from load_json import load_json
 
 # Connecting to MongoDB
 client = MongoClient('localhost', 27017)
 db = client['291db']
-collection = db['tweets']
 
 
-def search_tweets(keywords):
+
+def search_tweets(keywords: tuple, db: str):
+    # Connecting to MongoDB
+    client = MongoClient('localhost', 27017)
+    db = client[db]
+    collection = db['tweets']
+
     # Matching tweets containing all keywords
-    query = {'$and': [{'content': {'$regex': keyword, '$options': 'i'}}
-                      for keyword in keywords
-                      ]}
+    query = {'$and': [{'content': {'$regex': keyword, '$options': 'i'}} 
+    for keyword in keywords
+    ]}
 
     results = collection.find(query)
 
-    # Printing
+    # Print the id, date, content, and username for each matching tweet
+    for tweet in results:
+        print(f"ID: {tweet['id']}")
+        print(f"Date: {tweet['date']}")
+        print(f"Content: {tweet['content']}")
+        print(f"Username: {tweet['username']}")
+        print("-------------------")
 
     return results
 
 def search_users(keyword: str, db: str):
+    # Connecting to MongoDB
+    client = MongoClient('localhost', 27017)
+    db = client[db]
+    collection = db['tweets']
 
-    collection = db['users']
+    # Creating a query that matches users basing off displayname or location
+    query = {'$or': [{'user.displayname': {'$regex': keyword, '$options': 'i'}}, {'user.location': {'$regex': keyword, '$options': 'i'}}]}
 
-    # Matching users whose displayname or location contains the keyword
-    query = {'$or': [{'displayname': {'$regex': keyword, '$options': 'i'}}, {'location': {'$regex': keyword, '$options': 'i'}}]}
 
     results = collection.find(query)
 
-    # Listing the users
+    # Create a list of users
     users = []
-    for user in results:
+    for tweet in results:
+        user = tweet['user']
+        # Check if the user is already in the list
         if not any(u['username'] == user['username'] for u in users):
             # Add the user to the list
             users.append({
@@ -45,8 +61,11 @@ def search_users(keyword: str, db: str):
 
     return users
 
+
 def top_tweets(n: int, count: str, db: str):
-    
+    # Connecting to MongoDB
+    client = MongoClient('localhost', 27017)
+    db = client[db]
     collection = db['tweets']
 
     # Retrieving the top n tweets based on the specified field
@@ -65,44 +84,84 @@ def top_tweets(n: int, count: str, db: str):
     return tweets
 
 def top_users(n: int, db: str):
-    
-    collection = db['users']
+    # Connecting to MongoDB
+    client = MongoClient('localhost', 27017)
+    db = client[db]
+    collection = db['tweets']
 
-    # Getting the top n users based on the 'followersCount' field
-    query = collection.find().sort([('followersCount', -1)]).limit(n)
+    # Aggregating tweets based on username and getting their max followersCount 
+    ag_pipeline = [
+        {'$group': {
+            '_id': '$user.username',
+            'displayname': {'$first': '$user.displayname'},
+            'followersCount': {'$max': '$user.followersCount'}
+        }},
+        {'$sort': {'followersCount': -1}},
+        {'$limit': n}
+    ]
+
+    # Execute the aggregation pipeline
+    results = collection.aggregate(ag_pipeline)
 
     # Create a list of users
-    users = []
-    for user in query:
-        # Check if the user is already in the list
-        if not any(u['username'] == user['username'] for u in users):
-            # Add the user to the list
-            users.append({
-                'username': user['username'],
-                'displayname': user['displayname'],
-                'followersCount': user['followersCount']
-            })
+    users = [
+            {'username': user['_id'], 'displayname': user['displayname'], 'followersCount': user['followersCount']} 
+             for user in results
+             ]
 
     return users
 
+
 def compose_tweet(content: str, db: str):
-   
+    # Connect to MongoDB
+    client = MongoClient('localhost', 27017)
+    db = client[db]
     collection = db['tweets']
 
-    # Creating a new tweet format
+    # Create a new tweet
     tweet = {
         'content': content,
         'date': datetime.now(),
-        'username': '291user',
+        'user': {
+            'username': '291user',
+    # Setting the other fields to null
+            'displayname': None,
+            'id': None,
+            'description': None,
+            'followersCount': None,
+            'friendsCount': None,
+            'statusesCount': None,
+            'favouritesCount': None,
+            'listedCount': None,
+            'mediaCount': None,
+            'location': None,
+            'protected': None,
+            'linkUrl': None,
+            'linkTcourl': None,
+            'profileImageUrl': None,
+            'profileBannerUrl': None,
+            'url': None
+        },
+        # Setting the other fields to null
+        'url': None,
+        'renderedContent': None,
+        'replyCount': None,
         'retweetCount': None,
         'likeCount': None,
         'quoteCount': None,
-        # Add other fields as needed
+        'conversationId': None,
+        'lang': None,
+        'source': None,
+        'sourceUrl': None,
+        'sourceLabel': None,
+        'media': None,
+        'retweetedTweet': None,
+        'quotedTweet': None,
+        'mentionedUsers': None
     }
 
     # Inserting the tweet into the database
     collection.insert_one(tweet)
-
 
 
 if __name__ == "__main__":
