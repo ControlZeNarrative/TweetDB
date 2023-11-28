@@ -20,8 +20,9 @@ def main_menu():
     return int(option)
 
 def correct_input(usr_input: str, a: int, b: int):
+    uinput = 0
     if usr_input.isdigit():
-        uinput = int(uinput)
+        uinput = int(usr_input)
     else:
         return 0
     
