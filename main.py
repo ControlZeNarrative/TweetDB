@@ -132,6 +132,10 @@ def display_top_tweets(n: int, count: str, db: str):
 def display_top_users(n: int, db: str):
     users = functions.top_users(n, db)
     users = list(users)
+    if len(users) == 0:
+        print("No such users")
+        return
+    
     i = 1
     for user in users:
         print(
@@ -151,8 +155,6 @@ def display_top_users(n: int, db: str):
                     print(f"{key}: {value}")
                 print(" ")
                 return
-    else:
-        print("No such user")
 
     return
 
