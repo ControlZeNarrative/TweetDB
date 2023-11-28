@@ -31,7 +31,8 @@ def correct_input(usr_input: str, a: int, b: int):
     return 0
 
 def display_tweets(keywords: tuple):
-    tweets = search_tweets(keywords)
+    tweets = functions.search_tweets(keywords)
+    tweets = list(tweets)
     i = 0
     for tweet in tweets:
         i += 1
@@ -58,7 +59,8 @@ def display_tweets(keywords: tuple):
     return
 
 def display_users(keyword: str):
-    users = search_users(keyword)
+    users = functions.search_users(keyword)
+    users = list(users)
     i = 0
     for user in users:
         i += 1
@@ -85,7 +87,8 @@ def display_users(keyword: str):
     return
 
 def display_top_tweets(n: int, count: str):
-    tweets = top_tweets(n, count)
+    tweets = functions.top_tweets(n, count)
+    tweets = list(tweets)
     i = 0
     for tweet in tweets:
         i += 1
@@ -112,7 +115,8 @@ def display_top_tweets(n: int, count: str):
     return
 
 def display_top_users(n: int):
-    users = top_users(n)
+    users = functions.top_users(n)
+    users = list(users)
     i = 1
     for user in users:
         print(f'{i}. Username: {user["username"]}, Display name: {user["displayname"]}, Location: {user["location"]}')
