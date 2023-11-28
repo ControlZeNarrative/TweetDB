@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 from datetime import datetime
 
-
 # Connecting to MongoDB
 client = MongoClient('localhost', 27017)
 db = client['291db']
@@ -13,8 +12,8 @@ def search_tweets(keywords: tuple, db: str):
     db = client[db]
     collection = db['tweets']
 
-    # Matching tweets containing all keywords
-    query = {'$and': [{'content': {'$regex': '\\\\b' + keyword + '\\\\b', '$options': 'i'}}
+    # Matching tweets containing all keywords as separate words
+    query = {'$and': [{'content': {'$regex': f'\\b{keyword}\\b', '$options': 'i'}}
                       for keyword in keywords
                       ]}
 
@@ -31,9 +30,9 @@ def search_users(keyword: str, db: str):
     collection = db['tweets']
 
     # Create a query that matches users whose displayname or location contains the keyword
-    query = {'$or': [{'user.displayname': {'$regex': '\\\\b' + keyword + '\\\\b', '$options': 'i'}},
-                     {'user.location': {'$regex': '\\\\b' + keyword + '\\\\b', '$options': 'i'}}]}
-    
+    query = {'$or': [{'user.displayname': {'$regex': '\\b' + keyword + '\\b', '$options': 'i'}},
+                     {'user.location': {'$regex': '\\b' + keyword + '\\b', '$options': 'i'}}]}
+
     # Execute the query
     results = collection.find(query)
 
@@ -90,10 +89,11 @@ def top_users(n: int, db: str):
     users = [user['user'] for user in results]
 
     # Get all fields for these users
-    complete_users = [collection2.find_one({'user.id': user['id'], 'user.followersCount': user['followersCount']})['user'] for user in users]
+    complete_users = [
+        collection2.find_one({'user.id': user['id'], 'user.followersCount': user['followersCount']})['user'] for user in
+        users]
 
     return complete_users
-
 
 
 def compose_tweet(content: str, db: str):
@@ -146,4 +146,3 @@ def compose_tweet(content: str, db: str):
 
     # Inserting the tweet into the database
     collection.insert_one(tweet)
-
