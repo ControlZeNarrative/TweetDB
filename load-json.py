@@ -1,13 +1,13 @@
 import json
-import sys
+import pymongo
 from pymongo import MongoClient
 
 
-def load_json(file_name, port):
+# indexing for display name and location
+def loadjson(file_name, port):
     # Connect to MongoDB
     client = MongoClient('localhost', port)
     db = client['291db']
-
     # Drop the collection if it exists
     if 'tweets' in db.list_collection_names():
         db['tweets'].drop()
@@ -32,11 +32,16 @@ def load_json(file_name, port):
         if batch:
             collection.insert_many(batch)
 
+    create_indexes(db)
 
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: load_json.py <filename.json> <port>")
-        sys.exit(1)
 
-    json_file, port = sys.argv[1], int(sys.argv[2])
-    load_json(json_file, port)
+def create_indexes(db):
+    # Text index for content field in tweets
+    db['tweets'].create_index([("content", pymongo.TEXT)])
+    db['tweets'].create_index("retweetCount")
+    db['tweets'].create_index("likeCount")
+    db['tweets'].create_index("quoteCount")
+    # Index for user's username, displayname, and followersCount in tweets
+    db['tweets'].create_index("user.displayname")
+    db['tweets'].create_index("user.followersCount")
+
