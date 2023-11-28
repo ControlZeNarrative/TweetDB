@@ -1,12 +1,12 @@
 import json
 import pymongo
-from pymongo import MongoClient
+import sys
 
 
 # indexing for display name and location
 def loadjson(file_name, port):
     # Connect to MongoDB
-    client = MongoClient('localhost', port)
+    client = pymongo.MongoClient('localhost', port)
     db = client['291db']
     # Drop the collection if it exists
     if 'tweets' in db.list_collection_names():
@@ -45,3 +45,14 @@ def create_indexes(db):
     db['tweets'].create_index("user.displayname")
     db['tweets'].create_index("user.followersCount")
 
+
+def main():
+    if len(sys.argv) != 3:
+        print("Usage: main.py <filename.json> <port>")
+        sys.exit(1)
+    json_file, port = sys.argv[1], int(sys.argv[2])
+    loadjson(json_file, port)
+    return 0
+
+if __name__ == "__main__":
+    main()
