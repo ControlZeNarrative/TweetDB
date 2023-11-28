@@ -1,10 +1,6 @@
 from pymongo import MongoClient
 from datetime import datetime
 
-# Connecting to MongoDB
-client = MongoClient('localhost', 27017)
-db = client['291db']
-
 
 def search_tweets(keywords: tuple, db: str, port: int):
     # Connecting to MongoDB
