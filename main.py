@@ -39,8 +39,15 @@ def display_tweets(keywords: tuple, db: str):
     i = 0
     for tweet in tweets:
         i += 1
-        print(
-            f'{i}. id: {tweet["id"]}, Date: {tweet["date"]}, Username: {tweet["user"]["username"]}\nTweet Content: {tweet["content"]}')
+        tweet_id = tweet.get('id')
+        tweet_date = tweet.get('date')
+        tweet_username = tweet.get('user', {}).get('username')
+        tweet_content = tweet.get('content')
+
+        if tweet_id is not None:
+            print(f'{i}. ID: {tweet_id}, Date: {tweet_date}, Username: {tweet_username}\nTweet Content: {tweet_content}')
+        else:
+            print(f'{i}. ID: NULL, Date: {tweet_date}, Username: {tweet_username}\nTweet Content: {tweet_content}')
 
     # If there is at least one tweet that matches the keywords, give the user the option to select one
     if i != 0:
