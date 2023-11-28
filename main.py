@@ -95,12 +95,11 @@ def display_users(keyword: str, db: str):
 
 def display_top_tweets(n: int, count: str, db: str):
     tweets = functions.top_tweets(n, count, db)
-    tweets = list(tweets)
     i = 0
     for tweet in tweets:
         i += 1
         print(
-            f'{i}. ID: {tweet["id"]}, Date: {tweet["date"]}, Username: {tweet["username"]}\nTweet Content: {tweet["content"]}')
+            f'{i}. ID: {tweet["id"]}, Date: {tweet["date"]}, Username: {tweet["user"]["username"]}\nTweet Content: {tweet["content"]}')
 
     if i != 0:
         answer = input("Select a tweet to see more info or enter 0 to go back to the main screen: ")
@@ -128,7 +127,8 @@ def display_top_users(n: int, db: str):
     users = list(users)
     i = 1
     for user in users:
-        print(f'{i}. Username: {user["username"]}, Display name: {user["displayname"]}, Location: {user["location"]}')
+        print(
+            f'{i}. Username: {user["_id"]}, Display name: {user["displayname"]}, Followers Count: {user["followersCount"]}')
         i += 1
     answer = input("Select a user to see more info or enter 0 to go back to the main screen: ")
     while (correct_input(answer, 1, i) != 1):
