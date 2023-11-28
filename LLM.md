@@ -97,6 +97,7 @@ Please note that this function does not return anything. Also, remember to handl
 Input: Thank you, this will work!
 
 Input: In my search_tweets 
+https://chat.openai.com/c/c8a95958-f488-4344-9294-6044d978b942
 def search_tweets(keywords: tuple, db: str):
     # Connecting to MongoDB
     client = MongoClient('localhost', 27017)
