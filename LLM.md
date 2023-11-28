@@ -153,3 +153,51 @@ Make sure to test this function with various keywords to ensure that it's matchi
 It should match keywords that appear as separate words in the content.
 It should not match keywords that are part of larger words.
 This function, along with appropriate text indexing on the content field, should provide efficient and accurate searching capabilities for your application.
+
+
+Input : This is my schema
+https://www.kaggle.com/datasets/prathamsharma123/farmers-protest-tweets-dataset-raw-json
+
+can you tell me where at to index in phase 2
+
+AI output: 
+Given your dataset schema based on the Farmers Protest Tweets dataset from Kaggle, creating efficient indexes in MongoDB will be crucial for optimizing query performance in Phase 2. The choice of indexes largely depends on the queries you plan to run. Let's discuss potential indexes based on common operations you might perform:
+
+1. Search for Tweets
+By Content: If you are searching for tweets based on keywords in the content field, creating a text index on content would be beneficial.
+
+python
+Copy code
+collection.create_index([("content", pymongo.TEXT)])
+By Date: If you plan to query tweets based on their date, an index on the date field can improve efficiency.
+
+python
+Copy code
+collection.create_index("date")
+2. Search for Users
+Since the user information is nested within each tweet, you should index fields within the user subdocument that you'll query against. Common fields might include:
+
+Username: If you are searching for tweets based on the username of the user who posted them.
+
+python
+Copy code
+collection.create_index("user.username")
+Display Name: If you want to search by the display name of the user.
+
+python
+Copy code
+collection.create_index("user.displayname")
+3. List Top Tweets
+By Engagement Metrics: If you're listing top tweets based on engagement metrics like retweetCount, likeCount, or quoteCount, indexes on these fields will be useful.
+
+python
+Copy code
+collection.create_index("retweetCount")
+collection.create_index("likeCount")
+collection.create_index("quoteCount")
+4. List Top Users
+By Followers Count: For listing top users based on their followersCount, an index on this field within the user subdocument will be needed.
+
+python
+Copy code
+collection.create_index("user.followersCount")
