@@ -93,7 +93,7 @@ def top_users(n: int, db: str):
     users = [user['user'] for user in results]
 
     # Get all fields for these users
-    complete_users = [collection2.find_one({'id': user['id'], 'followersCount': user['followersCount']})['user'] for user in users]
+    complete_users = [collection2.find_one({'user.id': user['id'], 'user.followersCount': user['followersCount']})['user'] for user in users]
 
     return complete_users
 
