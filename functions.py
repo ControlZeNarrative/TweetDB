@@ -14,7 +14,7 @@ def search_tweets(keywords: tuple, db: str):
     collection = db['tweets']
 
     # Matching tweets containing all keywords
-    query = {'$and': [{'content': {'$regex': f'\\\\b{keyword}\\\\b', '$options': 'i'}}
+    query = {'$and': [{'content': {'$regex': '\\\\b' + keyword + '\\\\b', '$options': 'i'}}
                       for keyword in keywords
                       ]}
 
@@ -31,8 +31,8 @@ def search_users(keyword: str, db: str):
     collection = db['tweets']
 
     # Create a query that matches users whose displayname or location contains the keyword
-    query = {'$or': [{'user.displayname': {'$regex': f'\\\\b{keyword}\\\\b', '$options': 'i'}},
-                     {'user.location': {'$regex': f'\\\\b{keyword}\\\\b', '$options': 'i'}}]}
+    query = {'$or': [{'user.displayname': {'$regex': '\\\\b' + keyword + '\\\\b', '$options': 'i'}},
+                     {'user.location': {'$regex': '\\\\b' + keyword + '\\\\b', '$options': 'i'}}]}
     
     # Execute the query
     results = collection.find(query)
