@@ -128,7 +128,7 @@ def display_top_users(n: int, db: str):
     i = 1
     for user in users:
         print(
-            f'{i}. Username: {user["_id"]}, Display name: {user["displayname"]}, Followers Count: {user["followersCount"]}')
+            f'{i}. Username: {user["username"]}, Display name: {user["displayname"]}, Followers Count: {user["followersCount"]}')
         i += 1
     answer = input("Select a user to see more info or enter 0 to go back to the main screen: ")
     while (correct_input(answer, 1, i) != 1):
