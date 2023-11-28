@@ -187,7 +187,7 @@ def main():
 
             print(f"Do you wish to see the top {n} tweets based on retweetCount, likeCount, or quoteCount?")
             count = input("Enter r, l, or q for retweet, like, or quote counts respectively: ")
-            while count.islower() not in ["r", "l", "q"]:
+            while count.lower() not in ["r", "l", "q"]:
                 count = input("Enter r, l, or q for retweet, like, or quote counts respectively: ")
 
             # Display the tweets that match at least one of the keywords
