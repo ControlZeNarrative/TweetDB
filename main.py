@@ -33,8 +33,8 @@ def correct_input(usr_input: str, a: int, b: int):
     return 0
 
 
-def display_tweets(keywords: tuple, db: str):
-    tweets = functions.search_tweets(keywords, db)
+def display_tweets(keywords: tuple, db: str, port: int):
+    tweets = functions.search_tweets(keywords, db, port)
     tweets = list(tweets)
     i = 0
     for tweet in tweets:
@@ -72,8 +72,8 @@ def display_tweets(keywords: tuple, db: str):
     return
 
 
-def display_users(keyword: str, db: str):
-    users = functions.search_users(keyword, db)
+def display_users(keyword: str, db: str, port: int):
+    users = functions.search_users(keyword, db, port)
     users = list(users)
     i = 0
     for user in users:
@@ -101,8 +101,8 @@ def display_users(keyword: str, db: str):
     return
 
 
-def display_top_tweets(n: int, count: str, db: str):
-    tweets = functions.top_tweets(n, count, db)
+def display_top_tweets(n: int, count: str, db: str, port: int):
+    tweets = functions.top_tweets(n, count, db, port)
     i = 0
     for tweet in tweets:
         i += 1
@@ -130,8 +130,8 @@ def display_top_tweets(n: int, count: str, db: str):
     return
 
 
-def display_top_users(n: int, db: str):
-    users = functions.top_users(n, db)
+def display_top_users(n: int, db: str, port: int):
+    users = functions.top_users(n, db, port)
     users = list(users)
     if len(users) == 0:
         print("No such users")
@@ -161,11 +161,7 @@ def display_top_users(n: int, db: str):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print("Usage: main.py <filename.json> <port>")
-        sys.exit(1)
-    json_file, port = sys.argv[1], int(sys.argv[2])
-    load_json.loadjson(json_file, port)
+    port = int(sys.argv[1])
     db = "291db"
     command = main_menu()
     while (command):
@@ -177,7 +173,7 @@ def main():
             keywords = keywords.split(" ")
 
             # Display the tweets that match at least one of the keywords
-            display_tweets(tuple(keywords), db)
+            display_tweets(tuple(keywords), db, port)
         elif command == 2:
             keyword = input("Enter a keyword to search for in users: ")
             # Check that the input is not empty or whitespaces
@@ -185,7 +181,7 @@ def main():
                 keyword = input("Enter a keyword to search for in users: ")
 
             # Display users that match the key word
-            display_users(keyword, db)
+            display_users(keyword, db, port)
         elif command == 3:
             n = input("Enter the Top 'n' tweets you wish to see: ")
             # Check that the input is not whitespace or empty
@@ -199,7 +195,7 @@ def main():
                 count = input("Enter r, l, or q for retweet, like, or quote counts respectively: ")
 
             # Display the tweets that match at least one of the keywords
-            display_top_tweets(n, count, db)
+            display_top_tweets(n, count, db, port)
         elif command == 4:
             n = input("Enter the Top 'n' users you wish to see: ")
             # Check that the input is not whitespace or empty
@@ -207,11 +203,11 @@ def main():
                 n = input("Enter the Top 'n' users you wish to see: ")
             n = int(n)
 
-            display_top_users(n, db)
+            display_top_users(n, db, port)
         elif command == 5:
             text = input("Please enter the text of your tweet: ")
             try:
-                functions.compose_tweet(text, db)
+                functions.compose_tweet(text, db, port)
                 print("You've posted a tweet.\n")
             except:
                 print("Something went wrong while adding tweet to db")
