@@ -44,12 +44,14 @@ def display_tweets(keywords: tuple):
 
         #Print all fields
         if answer != 0:
-            for j, tweet in enumerate(tweets, start=1):
+            j = 1
+            for tweet in tweets:
                 if answer == j:
                     for key, value in tweet.items():
                         print(f"{key}: {value}")
                     print(" ")
                     return
+                j += 1
     else:
         print("No such tweets")
     return
