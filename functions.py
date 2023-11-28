@@ -48,7 +48,7 @@ def search_users(keyword: str, db: str, port: int):
     return userList
 
 
-def top_tweets(n: int, count: str, db: strt, port: int):
+def top_tweets(n: int, count: str, db: str, port: int):
     # Connecting to MongoDB
     client = MongoClient('localhost', port)
     db = client[db]
