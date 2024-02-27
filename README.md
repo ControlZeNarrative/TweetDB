@@ -3,6 +3,10 @@
 # CMPUT 291 Project 2 - Fall 2023  
 Group member names and ccids (3-4 members)  
 Aakarsh Gupta
+
 Pratham Prajapati
+
 Mikael Nineza
+
+Database used: https://www.kaggle.com/datasets/prathamsharma123/farmers-protest-tweets-dataset-csv
 
